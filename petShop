@@ -1,0 +1,417 @@
+package PetShop;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        //定义与初始化
+        double ans = 0;
+        int t1 = 0, t2 = 0, t3 = 0, j1 = 0, j2 = 0, j3 = 0, y1 = 0, y2 = 0, y3 = 0;
+        Petshop1 petshop1 = new Petshop1();
+        Dog dog = new Dog();
+        Cat cat = new Cat();
+        Bird bird = new Bird();
+        Meal1 m1 = new Meal1();
+        Meal2 m2 = new Meal2();
+        Meal3 m3 = new Meal3();
+        List<String> list = new ArrayList<String>();
+        SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        Scanner sc = new Scanner(System.in);
+
+        //封面-选择操作内容
+        int back = 1;
+        while (back != 0) {
+            System.out.print("请输入需要的选项：1.进货 2.顾客挑选 3.购物 4.寄养 5.打疫苗 6.查看套餐库存 7.打印工作日志 8.退出");
+            int i = sc.nextInt();
+            //退出循环。
+            if (i == 8) back = 0;
+                //进货
+            else if ((i == 1)) {
+                int k = 1;
+                while (k == 1) {
+                    System.out.print("请输入需要进货的套餐的代号（10套）：1.狗+狂犬疫苗 2.猫+狂犬疫苗 3.鸟+禽流感疫苗");
+                    int m = sc.nextInt();
+                    petshop1.jinhuo(m);
+                    //list.add(m+"于"+(df1.format(new Date()))+"进货十套");
+                    System.out.print("进货成功！本套餐库存为：");
+                    if (m == 1) System.out.println(petshop1.getMeal1());
+                    if (m == 2) System.out.println(petshop1.getMeal2());
+                    if (m == 3) System.out.println(petshop1.getMeal3());
+                    System.out.print("请输入需要的选项：0.返回上一级选项 1.继续进货 2.退出");
+                    k = sc.nextInt();
+                }
+                if (k == 2) break;
+            }
+            //查看商品
+            else if (i == 2) {
+                int k = 1;
+                System.out.print("商品信息：" + m1.toString() + "   " + "动物信息" + dog.toString() + "库存:");
+                petshop1.look(1);
+                System.out.println();
+                System.out.print("商品信息：" + m2.toString() + "   " + "动物信息：" + cat.toString() + "库存:");
+                petshop1.look(2);
+                System.out.println();
+                System.out.print("商品信息：" + m3.toString() + " " + "动物信息：" + bird.toString() + "库存:");
+                petshop1.look(3);
+                System.out.println();
+                System.out.println("请输入需要的选项：0.返回上一级选项 1.购物 2.退出");
+                k = sc.nextInt();
+                if (k == 1) i = 3;
+                else if (k == 2) break;
+            }
+
+            //卖货  （只采用if 是为了查看商品后可以直接购买。）
+            if (i == 3) {
+                int k = 1;
+                while (k == 1) {
+                    System.out.print("请输入需要购买的套餐：狗+狂犬疫苗(169) 猫+狂犬疫苗(179) 鸟+禽流感疫苗(149)");
+                    String m = sc.next();
+                    System.out.print("请输入套餐价格：");
+                    double n = sc.nextDouble();
+                    System.out.print("" + "请输入购买数量：");
+                    int j = sc.nextInt();
+                    if (!petshop1.sell(m, n, j)) System.out.println("库存不足");
+                    else {//petshop1.sell(m,n,j);
+                        ans = ans + (n * j);
+                        if (n == 169) t1 += j;
+                        if (n == 179) t2 += j;
+                        if (n == 149) t3 += j;
+                        list.add(m + "于" + (df1.format(new Date())) + "售出" + j + "套");
+                    }
+                    System.out.println("请输入需要的选项：0.返回上一级选项 1.继续购物 2.退出");
+                    k = sc.nextInt();
+
+                }
+                if (k == 2) break;
+            }
+            //寄养
+            else if (i == 4) {
+                int k = 1;
+                while (k == 1) {
+                    System.out.print("请输入需要寄养的动物（一次一只）：狗 猫 鸟");
+                    String m = sc.next();
+                    if (m.equals("狗")) ++j1;
+                    if (m.equals("猫")) ++j2;
+                    if (m.equals("鸟")) ++j3;
+                    System.out.println(m + "寄养成功！");
+                    list.add(m + "于" + (df1.format(new Date())) + "寄养一只");
+                    System.out.println("请输入需要的选项：0.返回上一级选项 1.继续寄养 2.退出");
+                    k = sc.nextInt();
+                }
+                if (k == 2) break;
+            }
+            //打疫苗
+            else if (i == 5) {
+                int k = 1;
+                while (k == 1) {
+                    System.out.print("请输入需要打疫苗的动物：狗 猫 鸟");
+                    String m = sc.next();
+                    System.out.print("请输入需要打的疫苗：狂犬疫苗 禽流感疫苗");
+                    String n = sc.next();
+                    System.out.println(m + "打" + n + "成功！");
+                    if (m.equals("狗")) ++y1;
+                    if (m.equals("猫")) ++y2;
+                    if (m.equals("鸟")) ++y3;
+                    list.add(m + "于" + (df1.format(new Date())) + "注射" + n);
+                    System.out.println("请输入需要的选项：0.返回上一级选项 1.继续接种 2.退出");
+                    k = sc.nextInt();
+                }
+                if (k == 2) break;
+
+            }
+            //查询库存
+            else if (i == 6) {
+                int k = 1;
+                while (k == 1) {
+                    System.out.print("请输入需要查询的套餐代号：1.狗+狂犬疫苗 2.猫+狂犬疫苗 3.鸟+禽流感疫苗");
+                    int m = sc.nextInt();
+                    System.out.print("库存：");
+                    petshop1.look(m);
+                    System.out.println();
+                    System.out.println("请输入需要的选项：0.返回上一级选项 1.继续查询 2.退出");
+                    k = sc.nextInt();
+                }
+                if (k == 2) break;
+            }
+            //打印工作日志
+            else if (i == 7) {
+                System.out.println("工作日志：");
+                System.out.println("销量： 狗+狂犬疫苗：" + t1 + "套。猫+狂犬疫苗：" + t2 + "套。鸟+禽流感疫苗：" + t3 + "套。");
+                System.out.println("寄养：狗：" + j1 + "只，猫：" + j2 + "只，鸟：" + j3 + "只");
+
+                System.out.print("库存：狗：");
+                petshop1.look(1);
+                System.out.print("只  猫：");
+                petshop1.look(2);
+                System.out.print("只  鸟：");
+                petshop1.look(3);
+                System.out.println("只。");
+                System.out.println("接种疫苗情况：狗：" + y1 + "只，猫：" + y2 + "只，鸟：" + y3 + "只");
+                System.out.println("资金余额：" + ans);
+                try {
+                    System.out.println("具体如下：" + list);
+                } catch (ArithmeticException e) {
+                    System.out.println("ArthmeticException");
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+}
+
+package PetShop;
+
+public class Animal {
+    public String name;
+    public int age;
+    public String color;
+    public double price;//相关参数
+
+    public void eat()//相关方法。
+    {
+        System.out.println(name + "吃食物");
+    }
+
+    public void sleep(int a) {
+        System.out.println(name + "睡觉" + a + "小时");
+    }
+
+
+}
+
+package PetShop;
+
+public class Bird extends Animal {
+    public String name = "杜鹃";
+    public int age = 3;
+    public String color = "blue";
+    public double price = 69.9;
+
+    @Override
+    public String toString() {
+        return "Bird{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", color='" + color + '\'' +
+                ", price=" + price +
+                '}';
+    }
+}
+package PetShop;
+
+public class Cat extends Animal {
+    public String name="小猫";
+    public int age=1;
+    public String color="white";
+    public double price=49.9;
+
+    @Override
+    public String toString() {
+
+        return "Cat{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", color='" + color + '\'' +
+                ", price=" + price +
+                '}';
+    }
+}
+
+package PetShop;
+
+public class Dog extends Animal {
+    public String name = "吉娃娃";
+    public int age = 3;
+    public String color = "white";
+    public double price = 39.9;
+
+    @Override
+    public String toString() {
+        return "Dog{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", color='" + color + '\'' +
+                ", price=" + price +
+                '}';
+    }
+}
+package PetShop;
+
+public class kqym extends Vaccine {
+    public String name = "狂犬疫苗";
+    public double price = 132;
+    public int time = 2;
+}
+package PetShop;
+
+public class Meal1 extends setMeal {
+
+    String name = "狗+狂犬疫苗";
+    double price = 169;
+
+    @Override
+    public void sell() {
+
+    }
+
+    @Override
+    public String toString() {
+        return "Meal1{" +
+                "name='" + this.name + '\'' +
+                ", price=" + this.price +
+                '}';
+    }
+
+}
+package PetShop;
+
+public class Meal2 extends setMeal {
+    String name = "猫+狂犬疫苗";
+    double price = 179;
+
+    @Override
+    public void sell() {
+
+
+    }
+
+    @Override
+    public String toString() {
+        return "Meal1{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                '}';
+    }
+}
+package PetShop;
+
+public class Meal3 extends setMeal {
+    String name = "鸟+禽流感疫苗";
+    double price = 149;
+
+    @Override
+    public void sell() {
+
+    }
+
+    @Override
+    public String toString() {
+        return "Meal3{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                '}';
+    }
+}
+package PetShop;
+
+public interface petShop {
+    public boolean sell(String name, double price, int number);
+
+    public void look(int a);
+
+    public void jinhuo(int a);
+
+}
+package PetShop;
+
+public class Petshop1 implements petShop {
+
+    private int Meal1 = 0, Meal2 = 0, Meal3 = 0;
+
+    @Override
+    public void jinhuo(int a) {
+        if (a == 1)
+            Meal1 += 10;
+        else if (a == 2)
+            Meal2 += 10;
+        else if (a == 3)
+            Meal3 += 10;
+    }
+
+    public boolean sell(String name, double price, int number) {
+        if (price == 169 && Meal1 - number < 0) return false;
+        else if (price == 179 && Meal2 - number < 0) return false;
+        else if (price == 149 && Meal3 - number < 0) return false;
+
+        if (price == 169) Meal1 -= number;
+        else if (price == 179) Meal2 -= number;
+        else if (price == 149) Meal3 -= number;
+        System.out.println("成功出售" + name + "套餐" + number + "组，共" + price * number + "元");
+        return true;
+    }
+
+    @Override
+    public void look(int a) {
+        if (a == 1)
+            System.out.print(Meal1);
+        else if (a == 2)
+            System.out.print(Meal2);
+        else if (a == 3)
+            System.out.print(Meal3);
+    }
+
+    public Petshop1(int meal1, int meal2, int meal3) {
+        Meal1 = meal1;
+        Meal2 = meal2;
+        Meal3 = meal3;
+    }
+
+    public Petshop1() {
+
+    }
+
+    public int getMeal1() {
+        return Meal1;
+    }
+
+    public void setMeal1(int meal1) {
+        Meal1 = meal1;
+    }
+
+    public int getMeal2() {
+        return Meal2;
+    }
+
+    public void setMeal2(int meal2) {
+        Meal2 = meal2;
+    }
+
+    public int getMeal3() {
+        return Meal3;
+    }
+
+    public void setMeal3(int meal3) {
+        Meal3 = meal3;
+    }
+}
+package PetShop;
+
+public class qlgym {
+    public String name = "禽流感疫苗";
+    public double price = 80;
+    public int time = 2;
+
+}
+package PetShop;
+
+public abstract class setMeal {
+    String name;
+    double price;
+
+    public abstract void sell();
+
+    public abstract String toString();
+}
+package PetShop;
+
+public class Vaccine {
+    public String name;
+    public double price;
+    public int time;
+
+}
